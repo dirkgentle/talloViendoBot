@@ -4,7 +4,7 @@ import random
 import time
 import datetime
 import traceback #para logear los errores
-import login #informacion personal para loggear el bot
+import login #informacion personal para log in del bot
 
 def update_log(id, log_path): #para los comentarios que ya respondi
 	with open(log_path, 'a') as myLog:

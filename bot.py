@@ -84,7 +84,9 @@ if __name__ == "__main__":
 						reply = get_reply_llueve()
 					else:
 						reply = get_reply_no_llueve()
-					s = "\n\n*****\n\n *Por ahora solo funciono en Montevideo, no sean crueles.*"
+					s = "\n\n*****"
+					s = s + "\n\n *Por ahora solo funciono en Montevideo, no sean crueles.*"
+					s = s + "\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)"
 					comment.reply(reply + s)
 					output_log("{" +  reply + "}")
 					log.append(comment.id)

@@ -26,7 +26,7 @@ def output_log(text): #lo uso para ver el output del bot
 
 def check_condition(c): #llamaron al bot?
 	text = c.body
-	if "!talloViendo" in text:
+	if "!talloviendo" in text.lower():
 		return True
 
 def check_rain(): #llueve en Montevideo?

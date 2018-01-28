@@ -1,35 +1,34 @@
-import praw
-import pyowm
-import login
+import praw #reddit
+import pyowm #informaciono meteorologica
 import random
 import time
 import datetime
-import traceback
-import unicodedata
+import traceback #para logear los errores
+import login #informacion personal para loggear el bot
 
-def update_log(id, log_path):
+def update_log(id, log_path): #para los comentarios que ya respondi
 	with open(log_path, 'a') as myLog:
 		myLog.write(id + "\n")
 
-def load_log(log_path):
+def load_log(log_path): #para los comentarios que ya respondi
 	with open(log_path) as myLog:
 		log = myLog.readlines()
 		log = [x.strip('\n') for x in log]
 		return log
 
-def output_log(text):
+def output_log(text): #lo uso para ver el output del bot
 	output_log_path = "/home/pi/Downloads/lluviaBot/output_log.txt"
 	with open(output_log_path, 'a') as myLog:
 		s = "[" +  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "] "
 		s = s + text +  "\n"
 		myLog.write(s)
 
-def check_condition(c):
+def check_condition(c): #llamaron al bot?
 	text = c.body
 	if "!talloViendo" in text:
 		return True
 
-def check_rain():
+def check_rain(): #llueve en Montevideo?
 	observation = owm.weather_at_place("Montevideo,UY")
 	w = observation.get_weather()
 	status = w.get_status()
@@ -63,14 +62,11 @@ def get_reply_no_llueve():
 	return random.choice(replies)
 
 if __name__ == "__main__":
-
+	comment_log_path = "/home/pi/Downloads/lluviaBot/log.txt"
 	while True:
 		try:
-			comment_log_path = "/home/pi/Downloads/lluviaBot/log.txt"
-			log = load_log(comment_log_path)
 			output_log("Comenzando el script")
-
-			#logins
+			log = load_log(comment_log_path)
 			reddit = praw.Reddit(	client_id = login.client_id,
 									client_secret = login.client_secret,
 									password = login.password,
@@ -81,7 +77,7 @@ if __name__ == "__main__":
 
 			for comment in reddit.subreddit('uruguay+test').stream.comments():
 				if check_condition(comment) and comment.id not in log:
-					body_ascii = unicodedata.normalize('NFKD', comment.body).encode('ascii', 'ignore')
+					body_ascii = unicodedata.normalize('NFKD', comment.body).encode('ascii', 'ignore') #esto porque me daba pila de problemas los comentarios unicode 
 					output_log("{" + body_ascii + "}")
 					if check_rain():
 						reply = get_reply_llueve()

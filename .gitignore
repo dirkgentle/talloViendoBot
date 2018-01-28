@@ -1,0 +1,4 @@
+login.py
+*.pyc
+log.txt
+output_log.txt

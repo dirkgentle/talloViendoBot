@@ -59,6 +59,7 @@ def get_reply_no_llueve():
 				"[Estoy durmiendo, no jodas. Molestalos a ellos, no a mi.](https://inumet.gub.uy/)",
 				"Sali a la calle y decime vos. Ugh!",
 				"Esta lloviendo.^/s \n\nJodete por creerle a un bot",
+				"[No hay agua.](https://www.youtube.com/watch?v=ngVwade2hII)"
 				]
 	return random.choice(replies)
 

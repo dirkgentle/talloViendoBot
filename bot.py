@@ -46,7 +46,8 @@ def get_reply_llueve():
 				"[Rain rain rain.](https://www.youtube.com/watch?v=N8jwzaidy7c)",
 				"[Llueve.](https://www.youtube.com/watch?v=RwAHQEaQ4BY).  \nAgonia de que no te tengo\n  Y cada gota representa un beso.\n  Los que me dabas en esos momentos.",
 				"[Vean el agua](https://youtu.be/-UI3i8cN8Wc?t=10)",
-				"Queridos amigos, cada vez llueve mas y mas en la ciudad de Montevideo. Es un diluvio, **UN DILUVIO**. Las calles estan inundandose. La gente anda con dos paraguas. Hay personas que tienen cuatro paraguas en vez de un paraguas. [Ahora les voy a mostrar.](https://youtu.be/MySumLLNYTc)"
+				"Queridos amigos, cada vez llueve mas y mas en la ciudad de Montevideo. Es un diluvio, **UN DILUVIO**. Las calles estan inundandose. La gente anda con dos paraguas. Hay personas que tienen cuatro paraguas en vez de un paraguas. [Ahora les voy a mostrar.](https://youtu.be/MySumLLNYTc)",
+				"[Y no para de lloveeer.](https://youtu.be/c91jxN3MV-w?t=90)"
 				]
 	return random.choice(replies)
 
@@ -59,7 +60,8 @@ def get_reply_no_llueve():
 				"[Estoy durmiendo, no jodas. Molestalos a ellos, no a mi.](https://inumet.gub.uy/)",
 				"Sali a la calle y decime vos. Ugh!",
 				"Esta lloviendo.^/s \n\nJodete por creerle a un bot",
-				"[No hay agua.](https://www.youtube.com/watch?v=ngVwade2hII)"
+				"[No hay agua!](https://www.youtube.com/watch?v=ngVwade2hII)",
+				"[Prende la tele un cachito, par favaar.](https://youtu.be/BUT9MPb_QNE)"
 				]
 	return random.choice(replies)
 

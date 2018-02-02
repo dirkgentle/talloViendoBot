@@ -62,7 +62,7 @@ def get_reply_no_llueve():
 				"Sali a la calle y decime vos. Ugh!",
 				"Esta lloviendo.^/s \n\nJodete por creerle a un bot",
 				"[No hay agua!](https://www.youtube.com/watch?v=ngVwade2hII)",
-				"[Prende la tele un cachito, par favaar.](https://youtu.be/BUT9MPb_QNE)"
+				"[Prende la tele un cachito, por favor.](https://youtu.be/BUT9MPb_QNE)"
 				]
 	return random.choice(replies)
 

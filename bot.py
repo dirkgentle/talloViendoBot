@@ -8,12 +8,12 @@ import unicodedata
 import login #informacion personal para log in del bot
 
 def update_log(id, log_path): #para los comentarios que ya respondi
-	with open(log_path, 'a') as myLog:
-		myLog.write(id + "\n")
+	with open(log_path, 'a') as my_log:
+		my_log.write(id + "\n")
 
 def load_log(log_path): #para los comentarios que ya respondi
-	with open(log_path) as myLog:
-		log = myLog.readlines()
+	with open(log_path) as my_log:
+		log = my_log.readlines()
 		log = [x.strip('\n') for x in log]
 		return log
 
@@ -29,13 +29,16 @@ def check_condition(c): #llamaron al bot?
 	if "!talloviendo" in text.lower():
 		return True
 
-def check_rain(): #llueve en Montevideo?
-	observation = owm.weather_at_place("Montevideo,UY")
-	w = observation.get_weather()
+def check_rain(w): #llueve en Montevideo?
 	status = w.get_status()
 	output_log('Status: ' + status)
 	if status  == 'Rain':
 		return True
+
+def get_temperature(w):
+	temp_dict = w.get_temperature(unit="celsius")
+	output_log('Temperature: ' + str(temp_dict))
+	return temp_dict["temp"]
 
 def get_reply_llueve():
 	replies = [	"[Tallo Viendo gurisxs!](https://pbs.twimg.com/media/ChydlIsUYAALxhj.jpg)",
@@ -52,7 +55,7 @@ def get_reply_llueve():
 				]
 	return random.choice(replies)
 
-def get_reply_no_llueve():
+def get_reply_no_llueve(temp):
 	replies = [ "Por que me despertas si no llueve? Te hice algo?",
 				"No llueve. Gracias por ilusionarme, che. Muy productiva esta sesion.",
 				"No seas malo, mira por la ventana. A vos te parece que llueve?",
@@ -62,8 +65,13 @@ def get_reply_no_llueve():
 				"Sali a la calle y decime vos. Ugh!",
 				"Esta lloviendo.^/s \n\nJodete por creerle a un bot",
 				"[No hay agua!](https://www.youtube.com/watch?v=ngVwade2hII)",
-				"[Prende la tele un cachito, por favor.](https://youtu.be/BUT9MPb_QNE)"
+				"[HispanTV no pierde vigencia.](https://youtu.be/BUT9MPb_QNE)"
 				]
+	replies_hot = [	"Con el calor que hace ojala lloviera. " + str(temp) + "C! A vos te parece!"
+					]
+	if temp > 27:
+		replies = replies + replies_hot
+
 	return random.choice(replies)
 
 if __name__ == "__main__":
@@ -82,20 +90,20 @@ if __name__ == "__main__":
 
 			for comment in reddit.subreddit('uruguay+test').stream.comments():
 				if check_condition(comment) and comment.id not in log:
-					body_ascii = unicodedata.normalize('NFKD', comment.body).encode('ascii', 'ignore') #esto porque me daba pila de problemas los comentarios unicode 
-					output_log("{" + body_ascii + "}")
-					if check_rain():
+					output_log("{" + unicodedata.normalize('NFKD', comment.body).encode('ascii', 'ignore') + "}") #esto porque me daba pila de problemas los comentarios unicode
+					observation = owm.weather_at_place("Montevideo,UY")
+					w = observation.get_weather()
+					if check_rain(w):
 						reply = get_reply_llueve()
 					else:
-						reply = get_reply_no_llueve()
+						reply = get_reply_no_llueve(get_temperature(w))
 					s = "\n\n*****"
-					s = s + "\n\n *Por ahora solo funciono en Montevideo, no sean crueles.*"
+					s = s + "\n\n *Solo funciono en Montevideo, no sean crueles.*"
 					s = s + "\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)"
 					comment.reply(reply + s)
 					output_log("{" +  reply + "}")
 					log.append(comment.id)
 					update_log(comment.id, comment_log_path)
-					#time.sleep(10 * 60)
 		except Exception as exception:
 			output_log(str(exception))
 			output_log(traceback.format_exc())

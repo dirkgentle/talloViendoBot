@@ -47,7 +47,8 @@ def get_reply_llueve():
 				"[Llueve.](https://www.youtube.com/watch?v=RwAHQEaQ4BY).  \nAgonia de que no te tengo\n  Y cada gota representa un beso.\n  Los que me dabas en esos momentos.",
 				"[Vean el agua](https://youtu.be/-UI3i8cN8Wc?t=10)",
 				"Queridos amigos, cada vez llueve mas y mas en la ciudad de Montevideo. Es un diluvio, **UN DILUVIO**. Las calles estan inundandose. La gente anda con dos paraguas. Hay personas que tienen cuatro paraguas en vez de un paraguas. [Ahora les voy a mostrar.](https://youtu.be/MySumLLNYTc)",
-				"[Y no para de lloveeer.](https://youtu.be/c91jxN3MV-w?t=90)"
+				"[Y no para de lloveeer.](https://youtu.be/c91jxN3MV-w?t=90)",
+				"[Mirando como llueve el dia pasa lento.](https://youtu.be/yTiCMxNcCkw?t=43)"
 				]
 	return random.choice(replies)
 

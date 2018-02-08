@@ -67,9 +67,9 @@ def get_reply_no_llueve(temp):
 				"[No hay agua!](https://www.youtube.com/watch?v=ngVwade2hII)",
 				"[HispanTV no pierde vigencia.](https://youtu.be/BUT9MPb_QNE)"
 				]
-	replies_hot = [	"Con el calor que hace ojala lloviera. " + str(temp) + "C! A vos te parece!"
+	replies_hot = [	"Con el calor que hace ojala lloviera. " + '%.1f' %temp + "C! A vos te parece!"
 					]
-	if temp > 27:
+	if temp >= 26:
 		replies = replies + replies_hot
 
 	return random.choice(replies)

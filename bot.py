@@ -32,7 +32,7 @@ def check_condition(c): #llamaron al bot?
 def check_rain(w): #llueve en Montevideo?
 	status = w.get_status()
 	output_log('Status: ' + status)
-	if status  == 'Rain' or status == 'Thunderstorm':
+	if status  == 'Rain' or status == 'Thunderstorm' or status == 'Drizzle':
 		return True
 
 def get_temperature(w):

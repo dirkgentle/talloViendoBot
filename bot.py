@@ -114,6 +114,7 @@ if __name__ == "__main__":
 						reply = get_reply_no_rain(get_temperature(w))
 					s = "\n\n*****"
 					s = s + "\n\n *Solo funciono en Montevideo, no sean crueles.*"
+					s = s + "\n\n Contact my owner \/u/DirkGentle"
 					s = s + "\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)"
 					comment.reply(reply + s)
 					output_log("{" +  reply + "}")

@@ -29,18 +29,12 @@ def check_condition(c): #llamaron al bot?
 	if "!talloviendo" in text.lower():
 		return True
 
-def check_rain(w): #llueve en Montevideo?
-	status = w.get_status()
-	output_log('Status: ' + status)
-	if status  == 'Rain' or status == 'Thunderstorm' or status == 'Drizzle':
-		return True
-
 def get_temperature(w):
 	temp_dict = w.get_temperature(unit="celsius")
 	output_log('Temperature: ' + str(temp_dict))
 	return temp_dict["temp"]
 
-def get_reply_llueve():
+def get_reply_rain():
 	replies = [	"[Tallo Viendo gurisxs!](https://pbs.twimg.com/media/ChydlIsUYAALxhj.jpg)",
 				"[Con tortas fritas cantare bajo la lluvia!](https://youtu.be/PIYiK1Qnbjc?t=59)",
 				"[Metan la ropa burise!](https://ak4.picdn.net/shutterstock/videos/732994/thumb/8.jpg)"
@@ -51,11 +45,27 @@ def get_reply_llueve():
 				"[Vean el agua](https://youtu.be/-UI3i8cN8Wc?t=10)",
 				"Queridos amigos, cada vez llueve mas y mas en la ciudad de Montevideo. Es un diluvio, **UN DILUVIO**. Las calles estan inundandose. La gente anda con dos paraguas. Hay personas que tienen cuatro paraguas en vez de un paraguas. [Ahora les voy a mostrar.](https://youtu.be/MySumLLNYTc)",
 				"[Y no para de lloveeer.](https://youtu.be/c91jxN3MV-w?t=90)",
-				"[Mirando como llueve el dia pasa lento.](https://youtu.be/yTiCMxNcCkw?t=43)"
+				"[Mirando como llueve el dia pasa lento.](https://youtu.be/yTiCMxNcCkw?t=43)",
+				"[Se recomienda salir con paraguas.](http://images.teinteresa.es/mundo/Tormenta-Montevideo-Uruguay_TINIMA20120922_0044_5.jpg)"
 				]
 	return random.choice(replies)
 
-def get_reply_no_llueve(temp):
+def get_reply_drizzle():
+	replies = [	"Montevideo gris, [llovizna](https://youtu.be/TsRhkwPFxmQ?t=20).",
+				"[Llovizna, tranqui.](https://pbs.twimg.com/media/CrggaLdWIAAwcX7.jpg)"
+				"Estamos mas o menos [asi](http://static.panoramio.com/photos/large/79137766.jpg)."
+				]
+	return random.choice(replies)
+
+def get_reply_thunderstorm():
+	replies = [	"[Asi estamos](https://www.youtube.com/watch?v=eGj9MozpV1I)",
+				"[Bo, la tormenta ya esta arriba](https://www.youtube.com/watch?v=zGljp1TMhg0)",
+				"[Esto](https://media.elobservador.com.uy/adjuntos/181/imagenes/000/869/0000869009.jpg) es porque el  cerro quiso separarse.",
+				"[En cualquier rato le cae un rayo a presidencia.](https://ugc.kn3.net/i/origin/http://www.lr21.com.uy/wp-content/uploads/2012/02/RayosMontevideoAFP1.jpg)"
+				]
+	return random.choice(replies)
+
+def get_reply_no_rain(temp):
 	replies = [ "Por que me despertas si no llueve? Te hice algo?",
 				"No llueve. Gracias por ilusionarme, che. Muy productiva esta sesion.",
 				"No seas malo, mira por la ventana. A vos te parece que llueve?",
@@ -71,7 +81,6 @@ def get_reply_no_llueve(temp):
 					]
 	if temp >= 26:
 		replies = replies + replies_hot
-
 	return random.choice(replies)
 
 if __name__ == "__main__":
@@ -93,10 +102,16 @@ if __name__ == "__main__":
 					output_log("{" + unicodedata.normalize('NFKD', comment.body).encode('ascii', 'ignore') + "}") #esto porque me daba pila de problemas los comentarios unicode
 					observation = owm.weather_at_place("Montevideo,UY")
 					w = observation.get_weather()
-					if check_rain(w):
-						reply = get_reply_llueve()
+					status = w.get_status()
+					output_log('Status: ' + status)
+					if status == 'Rain':
+						reply = get_reply_rain()
+					elif status == 'Thunderstorm':
+						reply = get_reply_thunderstorm()
+					elif status == 'Drizzle':
+						reply = get_reply_drizzle()
 					else:
-						reply = get_reply_no_llueve(get_temperature(w))
+						reply = get_reply_no_rain(get_temperature(w))
 					s = "\n\n*****"
 					s = s + "\n\n *Solo funciono en Montevideo, no sean crueles.*"
 					s = s + "\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)"

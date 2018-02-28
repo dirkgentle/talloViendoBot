@@ -97,7 +97,7 @@ if __name__ == "__main__":
 			output_log("Login to reddit as: " + reddit.user.me().name)
 			owm = pyowm.OWM(login.owm_key)
 
-			for comment in reddit.subreddit('uruguay+test').stream.comments():
+			for comment in reddit.subreddit('pitcnt+test').stream.comments():
 				if check_condition(comment) and comment.id not in log:
 					output_log("{" + unicodedata.normalize('NFKD', comment.body).encode('ascii', 'ignore') + "}") #esto porque me daba pila de problemas los comentarios unicode
 					observation = owm.weather_at_place("Montevideo,UY")

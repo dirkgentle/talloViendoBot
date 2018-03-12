@@ -18,7 +18,7 @@ def load_log(log_path): #para los comentarios que ya respondi
 		return log
 
 def output_log(text): #lo uso para ver el output del bot
-	output_log_path = "/home/pi/Downloads/lluviaBot/output_log.txt"
+	output_log_path = "output_log.txt"
 	with open(output_log_path, 'a') as myLog:
 		s = "[" +  datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "] "
 		s = s + text +  "\n"
@@ -84,7 +84,7 @@ def get_reply_no_rain(temp):
 	return random.choice(replies)
 
 if __name__ == "__main__":
-	comment_log_path = "/home/pi/Downloads/lluviaBot/log.txt"
+	comment_log_path = "log.txt"
 	while True:
 		try:
 			output_log("Comenzando el script")

@@ -77,17 +77,21 @@ replies_dict = {
 allowed_subreddits = ['Uruguay', 'ROU', 'pitcnt', 'test']
 
 
-epilogue = (
+epilogue_text = (
     '\n\n*****'
-    '\n\n *Solo funciono en Uruguay, manéjense*'
-    '\n\n Contact my owner \/u/DirkGentle'
-    '\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)'
+    '\n\n *Solo funciono en Uruguay, manéjense.*'
+    ' Contact my owner \/u/DirkGentle.'
+    ' [Source.](https://github.com/dirkgentle/talloViendoBot)'
     )
 
-hint = (
+hint_text = (
     '\n\n ¿No es tu ubicación?'
-    ' Recordá usar \"\" para lugares con más de una palabra'
-)
+    ' Recordá usar \"\" para lugares con más de una palabra')
+
+not_found_text = (
+    ' no está en la lista de ciudades uruguayas en OpenWeatherMap. '
+    'Podés verificar el nombre de tu ciudad [acá.]'
+    '(https://openweathermap.org/find)')
 
 
 if __name__ == '__main__':
@@ -136,14 +140,17 @@ if __name__ == '__main__':
                         reply += '\n\n*En: ' + location + '*'
                     except pyowm.exceptions.not_found_error.NotFoundError:
                         output_log('Location not found', debug_mode)
-                        reply = location + ' no está en la lista de ciudades uruguayas en OpenWeatherMap. Podés verificar el nombre de tu ciudad [acá.](https://openweathermap.org/find)'
+                        reply = location + not_found_text
 
-                    reply += hint
-                    comment.reply(reply + epilogue)
-
+                    reply += hint_text
+                    reply += epilogue_text
                     output_log('{' +  reply + '}', debug_mode)
-                    log.append(comment.id)
-                    update_log(comment.id, comment_log_path)
+
+                    if not debug_mode:
+                        comment.reply(reply)
+                        log.append(comment.id)
+                        update_log(comment.id, comment_log_path)
+
 
         except Exception as exception:
             output_log(str(exception))

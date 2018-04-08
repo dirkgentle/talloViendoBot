@@ -1,5 +1,4 @@
 import random
-import time
 import datetime
 import traceback #para logear los errores
 import sys, getopt
@@ -28,7 +27,8 @@ def load_log(log_path): #para los comentarios que ya respondi
         return log
 
 def output_log(text, debug_mode=False): #lo uso para ver el output del bot
-    output_log_path = 'output_log.txt'
+    date_text = datetime.date.today().strftime('%Y_%m')
+    output_log_path = './logs/' + date_text + '_output_log.txt'
     with open(output_log_path, 'a') as myLog:
         s = '[' +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ']'
         s = s + text +  '\n'
@@ -80,7 +80,7 @@ allowed_subreddits = ['Uruguay', 'ROU', 'pitcnt', 'test']
 epilogue_text = (
     '\n\n*****'
     '\n\n *Solo funciono en Uruguay, manéjense.*'
-    ' Contact my owner \/u/DirkGentle.'
+    ' Owned by \/u/DirkGentle.'
     ' [Source.](https://github.com/dirkgentle/talloViendoBot)'
     )
 

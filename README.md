@@ -9,4 +9,7 @@ Pero *corre*.
 ## Como usar
 
 - `!talloviendo` -> responde si llueve en Montevideo.
-- `!talloviendo "lugar"` -> responde si llueve en "lugar"
+- `!talloviendo en lugar` -> responde si llueve en lugar, si lugar es de una sola palabra
+- `!talloviendo "otro lugar"` -> responde si llueve en "otro lugar". "Otro lugar" puede tener todas las palabras que quiera.
+
+Ver ejemplos [acá](https://regex101.com/r/dovCdU/3).

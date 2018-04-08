@@ -12,7 +12,9 @@ import pyowm #informacion meteorologica
 import login #informacion personal para log in del bot
 
 
-PATTERN = re.compile(r'!talloviendo (?:en )?(\"?)([a-z ]+?\b)\1', re.IGNORECASE) #Tests: https://regex101.com/r/dovCdU/2
+PATTERN = re.compile(
+    r'!talloviendo ?(?:en )?(\"?)([a-záéíóúñ ]+?\b)?\1',
+    re.IGNORECASE) #Tests: https://regex101.com/r/dovCdU/3
 
 def update_log(id, log_path): #para los comentarios que ya respondi
     with open(log_path, 'a') as my_log:
@@ -34,13 +36,13 @@ def output_log(text, debug_mode=False): #lo uso para ver el output del bot
     if debug_mode: print(text)
 
 def check_condition(c): #llamaron al bot?
-    aux = PATTERN.search(unidecode.unidecode(c.body))
+    aux = PATTERN.search(c.body)
     if aux == None:
         return False
     elif not aux.group(2) or len(aux.group(2)) < 3:
         return 'Montevideo'
     else:
-        return aux.group(2)[1:-1]
+        return aux.group(2)
 
 def get_temperature(w):
     temp_dict = w.get_temperature(unit='celsius')
@@ -71,6 +73,7 @@ replies_dict = {
     'Drizzle': get_reply_drizzle,
     }
 
+
 allowed_subreddits = ['Uruguay', 'ROU', 'pitcnt', 'test']
 
 
@@ -80,6 +83,11 @@ epilogue = (
     '\n\n Contact my owner \/u/DirkGentle'
     '\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)'
     )
+
+hint = (
+    '\n\n ¿No es tu ubicación?'
+    ' Recordá usar \"\" para lugares con más de una palabra'
+)
 
 
 if __name__ == '__main__':
@@ -124,12 +132,13 @@ if __name__ == '__main__':
                         output_log('Status: ' + status, debug_mode)
                         #TODO: reimplmement hot day answers
                         reply = replies_dict.get(status, get_reply_no_rain)()
-                        reply = reply + '\n\n *****'
-                        reply = reply + '\n\n*En: ' + location + '*'
+                        reply += '\n\n *****'
+                        reply += '\n\n*En: ' + location + '*'
                     except pyowm.exceptions.not_found_error.NotFoundError:
                         output_log('Location not found', debug_mode)
-                        reply = location + ' no es en Uruguay.'
+                        reply = location + ' no está en la lista de ciudades uruguayas en OpenWeatherMap. Podés verificar el nombre de tu ciudad [acá.](https://openweathermap.org/find)'
 
+                    reply += hint
                     comment.reply(reply + epilogue)
 
                     output_log('{' +  reply + '}', debug_mode)

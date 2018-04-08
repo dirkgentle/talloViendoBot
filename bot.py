@@ -87,7 +87,7 @@ epilogue_text = (
     )
 
 hint_text = (
-    '\n\n ¿No es tu ubicación?'
+    ' ¿No es tu ubicación?'
     ' Recordá usar \"\" para lugares con más de una palabra')
 
 not_found_text = (
@@ -139,7 +139,7 @@ if __name__ == '__main__':
                         #TODO: reimplmement hot day answers
                         reply = replies_dict.get(status, get_reply_no_rain)()
                         reply += '\n\n *****'
-                        reply += '\n\n*En: ' + location + '*'
+                        reply += '\n\n*En: ' + location + '.*'
                     except pyowm.exceptions.not_found_error.NotFoundError:
                         output_log('Location not found', debug_mode)
                         reply = location + not_found_text

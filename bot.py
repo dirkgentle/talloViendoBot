@@ -87,7 +87,7 @@ epilogue_text = (
     )
 
 hint_text = (
-    ' ¿No es tu ubicación?'
+    '\n\n¿No es tu ubicación?'
     ' Recordá usar \"\" para lugares con más de una palabra')
 
 not_found_text = (

@@ -12,7 +12,7 @@ import pyowm #informacion meteorologica
 import login #informacion personal para log in del bot
 
 
-PATTERN = re.compile(r'!(talloviendo) ?(\"[a-z ]*\")?', re.IGNORECASE)
+PATTERN = re.compile(r'!talloviendo (?:en )?(\"?)([a-z ]+?\b)\1', re.IGNORECASE) #Tests: https://regex101.com/r/dovCdU/2
 
 def update_log(id, log_path): #para los comentarios que ya respondi
     with open(log_path, 'a') as my_log:
@@ -37,7 +37,7 @@ def check_condition(c): #llamaron al bot?
     aux = PATTERN.search(unidecode.unidecode(c.body))
     if aux == None:
         return False
-    elif not aux.group(2) or len(aux.group(2))<3:
+    elif not aux.group(2) or len(aux.group(2)) < 3:
         return 'Montevideo'
     else:
         return aux.group(2)[1:-1]

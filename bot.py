@@ -36,13 +36,15 @@ def output_log(text, debug_mode=False): #lo uso para ver el output del bot
     if debug_mode: print(text)
 
 def check_condition(c): #llamaron al bot?
-    aux = PATTERN.search(c.body)
-    if aux == None:
+    #TODO tratar de meter esta primera normalizacion en la regex
+    text = c.body.replace('”','\"').replace('“','\"')
+    match = PATTERN.search(text)
+    if match == None:
         return False
-    elif not aux.group(2) or len(aux.group(2)) < 3:
+    elif not match.group(2) or len(match.group(2)) < 3:
         return 'Montevideo'
     else:
-        return aux.group(2)
+        return match.group(2)
 
 def get_temperature(w):
     temp_dict = w.get_temperature(unit='celsius')
@@ -85,7 +87,7 @@ epilogue_text = (
     )
 
 hint_text = (
-    '\n\n ¿No es tu ubicación?'
+    ' ¿No es tu ubicación?'
     ' Recordá usar \"\" para lugares con más de una palabra')
 
 not_found_text = (
@@ -137,7 +139,7 @@ if __name__ == '__main__':
                         #TODO: reimplmement hot day answers
                         reply = replies_dict.get(status, get_reply_no_rain)()
                         reply += '\n\n *****'
-                        reply += '\n\n*En: ' + location + '*'
+                        reply += '\n\n*En: ' + location + '.*'
                     except pyowm.exceptions.not_found_error.NotFoundError:
                         output_log('Location not found', debug_mode)
                         reply = location + not_found_text

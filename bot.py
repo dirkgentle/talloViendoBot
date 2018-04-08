@@ -2,9 +2,9 @@ import random
 import time
 import datetime
 import traceback #para logear los errores
-import unicodedata
 import sys, getopt
 import json
+import re
 
 import praw #reddit
 import pyowm #informacion meteorologica
@@ -12,8 +12,11 @@ import pyowm #informacion meteorologica
 import login #informacion personal para log in del bot
 
 
+PATTERN = re.compile(r'!(talloviendo) ?(\"[a-z ]*\")?')
+
 def update_log(id, log_path): #para los comentarios que ya respondi
     with open(log_path, 'a') as my_log:
+
         my_log.write(id + '\n')
 
 def load_log(log_path): #para los comentarios que ya respondi
@@ -31,9 +34,13 @@ def output_log(text, debug_mode=False): #lo uso para ver el output del bot
     if debug_mode: print(text)
 
 def check_condition(c): #llamaron al bot?
-    text = c.body
-    if '!talloviendo' in text.lower():
-        return True
+    aux = PATTERN.search(c.body.lower()) 
+    if aux == None:
+        return False
+    elif not aux.group(2) or len(aux.group(2))<3:
+        return 'Montevideo'
+    else:
+        return aux.group(2)[1:-1]
 
 def get_temperature(w):
     temp_dict = w.get_temperature(unit='celsius')
@@ -66,6 +73,15 @@ replies_dict = {
 
 allowed_subreddits = ['Uruguay', 'ROU', 'pitcnt', 'test']
 
+
+epilogue = (
+    '\n\n*****'
+    '\n\n *Solo funciono en Uruguay, manéjense*'
+    '\n\n Contact my owner \/u/DirkGentle'
+    '\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)'
+    )
+
+
 if __name__ == '__main__':
 
     comment_log_path = 'log.txt'
@@ -96,23 +112,25 @@ if __name__ == '__main__':
             owm = pyowm.OWM(login.owm_key)
 
             for comment in reddit.subreddit(multireddit).stream.comments():
-                if check_condition(comment) and comment.id not in log:
+                location = check_condition(comment)
+                if location and comment.id not in log:
                     output_log(comment.body, debug_mode)
+                    output_log(location + ',UY')
 
-                    observation = owm.weather_at_place('Montevideo,UY')
-                    w = observation.get_weather()
-                    status = w.get_status()
-                    output_log('Status: ' + status, debug_mode)
+                    try:
+                        obs = owm.weather_at_place(location + ',UY')
+                        w = obs.get_weather()
+                        status = w.get_status()
+                        output_log('Status: ' + status, debug_mode)
+                        #TODO: reimplmement hot day answers
+                        reply = replies_dict.get(status, get_reply_no_rain)()
+                        reply = reply + '\n\n *****'
+                        reply = reply + '\n\n*En: ' + location + '*'
+                    except pyowm.exceptions.not_found_error.NotFoundError:
+                        output_log('Location not found', debug_mode)
+                        reply = 'Location: \"' + location + '\' not found'
 
-                    #TODO: reimplmement hot day answers
-                    reply = replies_dict.get(status, get_reply_no_rain)()
-                    s = '\n\n*****'
-                    s = s + '\n\n *Solo funciono en Montevideo, manéjense.*'
-                    s = s + '\n\n Contact my owner \/u/DirkGentle'
-                    s = s + '\n\n [Source.](https://github.com/dirkgentle/talloViendoBot)'
-                    reply = reply + s
-
-                    comment.reply(reply)
+                    comment.reply(reply + epilogue)
                     output_log('{' +  reply + '}', debug_mode)
                     log.append(comment.id)
                     update_log(comment.id, comment_log_path)

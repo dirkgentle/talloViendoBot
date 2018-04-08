@@ -5,3 +5,8 @@ Este es un bot de reddit que cuando en un comentario esta el trigger `!talloVien
 Disclaimer: no se mucho de python o bots. Seguro tiene todas las malas practicas del mundo.
 
 Pero *corre*.
+
+## Como usar
+
+- `!talloviendo` -> responde si llueve en Montevideo.
+- `!talloviendo "lugar"` -> responde si llueve en "lugar"

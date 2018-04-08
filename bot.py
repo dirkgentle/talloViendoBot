@@ -128,9 +128,10 @@ if __name__ == '__main__':
                         reply = reply + '\n\n*En: ' + location + '*'
                     except pyowm.exceptions.not_found_error.NotFoundError:
                         output_log('Location not found', debug_mode)
-                        reply = 'Location: \"' + location + '\' not found'
+                        reply = location + 'no es en Uruguay.'
 
                     comment.reply(reply + epilogue)
+
                     output_log('{' +  reply + '}', debug_mode)
                     log.append(comment.id)
                     update_log(comment.id, comment_log_path)

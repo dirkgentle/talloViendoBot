@@ -13,8 +13,8 @@ import login #informacion personal para log in del bot
 
 
 PATTERN = re.compile(
-    r'!talloviendo ?(?:en )?(\"?)([a-záéíóúñ ]+?\b)?\1',
-    re.IGNORECASE) #Tests: https://regex101.com/r/dovCdU/3
+    r'(?<!\\)!talloviendo ?(?:en )?(\"?)([a-záéíóúñ ]+?\b)?\1', 
+    re.IGNORECASE) #Tests: https://regex101.com/r/dovCdU/4
 
 def update_log(id, log_path): #para los comentarios que ya respondi
     with open(log_path, 'a') as my_log:

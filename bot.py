@@ -12,7 +12,7 @@ import pyowm #informacion meteorologica
 import login #informacion personal para log in del bot
 
 
-PATTERN = re.compile(r'!(talloviendo) ?(\"[a-z ]*\")?')
+PATTERN = re.compile(r'!(talloviendo) ?(\"[a-z ]*\")?', re.IGNORECASE)
 
 def update_log(id, log_path): #para los comentarios que ya respondi
     with open(log_path, 'a') as my_log:
@@ -34,7 +34,7 @@ def output_log(text, debug_mode=False): #lo uso para ver el output del bot
     if debug_mode: print(text)
 
 def check_condition(c): #llamaron al bot?
-    aux = PATTERN.search(c.body.lower()) 
+    aux = PATTERN.search(unidecode.unidecode(c.body))
     if aux == None:
         return False
     elif not aux.group(2) or len(aux.group(2))<3:

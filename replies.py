@@ -32,5 +32,6 @@ replies_dict = {
     }
 
 
-def get_reply_from_status(status, temp=22):
-    return replies_dict.get(status, get_reply_no_rain)(temp)
+def get_reply_from_status(status, location, temp=22):
+    reply = replies_dict.get(status, get_reply_no_rain)(temp)
+    return reply.format(location)

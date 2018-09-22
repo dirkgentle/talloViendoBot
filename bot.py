@@ -8,7 +8,7 @@ import pyowm  # informacion meteorologica
 
 import login  # informacion personal para log in del bot
 import logger
-import reply
+import replies
 
 
 PATTERN = re.compile(
@@ -31,7 +31,7 @@ def check_condition(c):  # llamaron al bot?
 
 def get_temperature(w):
     temp_dict = w.get_temperature(unit='celsius')
-    logger.output_log('Temperature: ' + str(temp_dict), debug_mode)
+    logger.output_log('Temperature: {}'.format(temp_dict), debug_mode)
     return temp_dict['temp']
 
 
@@ -40,19 +40,21 @@ allowed_subreddits = ['Uruguay', 'ROU', 'pitcnt', 'test']
 
 epilogue_text = (
     '\n\n*****'
-    '\n\n *Solo funciono en Uruguay, manéjense.*'
+    '\n\n*Solo funciono en Uruguay, manéjense.*'
     ' Owned by \/u/DirkGentle.'
     ' [Source.](https://github.com/dirkgentle/talloViendoBot)'
-    )
+)
 
 hint_text = (
     '\n\n¿No es tu ubicación?'
-    ' Recordá usar \"\" para lugares con más de una palabra')
+    ' Recordá usar \"\" para lugares con más de una palabra'
+)
 
 not_found_text = (
-    ' no está en la lista de ciudades uruguayas en OpenWeatherMap. '
+    '{} no está en la lista de ciudades uruguayas en OpenWeatherMap. '
     'Podés verificar el nombre de tu ciudad [acá.]'
-    '(https://openweathermap.org/find)')
+    '(https://openweathermap.org/find)'
+)
 
 
 if __name__ == '__main__':
@@ -82,7 +84,7 @@ if __name__ == '__main__':
                 username=login.username
             )
             logger.output_log(
-                'Login to reddit as: ' + reddit.user.me().name,
+                'Login to reddit as: {}'.format(reddit.user.me().name),
                 debug_mode)
             owm = pyowm.OWM(login.owm_key)
 
@@ -90,24 +92,30 @@ if __name__ == '__main__':
                 location = check_condition(comment)
                 if location and comment.id not in log:
                     logger.output_log(comment.body, debug_mode)
-                    logger.output_log(location + ',UY')
+                    logger.output_log('{},UY'.format(location))
 
                     try:
-                        obs = owm.weather_at_place(location + ',UY')
+                        obs = owm.weather_at_place('{},UY'.format(location))
                         w = obs.get_weather()
                         status = w.get_status()
                         temp = get_temperature(w)
-                        logger.output_log('Status: ' + status, debug_mode)
-                        reply = reply.get_reply_from_status(status, temp)
-                        reply += '\n\n *****'
-                        reply += '\n\n*En: ' + location + '.*'
+                        logger.output_log(
+                            'Status: {}'.format(status), debug_mode
+                        )
+                        reply = '{}\n\n*****\n\n*En: {}.*'.format(
+                            replies.get_reply_from_status(status, temp),
+                            location
+                        )
                     except pyowm.exceptions.not_found_error.NotFoundError:
                         logger.output_log('Location not found', debug_mode)
-                        reply = location + not_found_text
+                        reply = not_found_text.format(location)
 
-                    reply += hint_text
-                    reply += epilogue_text
-                    logger.output_log('{' + reply + '}', debug_mode)
+                    reply = '{}{}{}'.format(
+                        reply,
+                        hint_text,
+                        epilogue_text
+                    )
+                    logger.output_log('{{ {} }}'.format(reply), debug_mode)
 
                     if not debug_mode:
                         comment.reply(reply)

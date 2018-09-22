@@ -103,7 +103,9 @@ if __name__ == '__main__':
                             'Status: {}'.format(status), debug_mode
                         )
                         reply = '{}\n\n*****\n\n*En: {}.*'.format(
-                            replies.get_reply_from_status(status, temp),
+                            replies.get_reply_from_status(
+                                status, location, temp
+                            ),
                             location
                         )
                     except pyowm.exceptions.not_found_error.NotFoundError:

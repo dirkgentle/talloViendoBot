@@ -91,6 +91,7 @@ if __name__ == '__main__':
             for comment in reddit.subreddit(multireddit).stream.comments():
                 location = check_condition(comment)
                 if location and comment.id not in log:
+                    location = location.title()
                     logger.output_log(comment.body, debug_mode)
                     logger.output_log('{},UY'.format(location))
 

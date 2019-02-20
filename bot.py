@@ -109,7 +109,7 @@ if __name__ == '__main__':
                             ),
                             location
                         )
-                    except pyowm.exceptions.not_found_error.NotFoundError:
+                    except pyowm.exceptions.api_response_error.NotFoundError:
                         logger.output_log('Location not found', debug_mode)
                         reply = not_found_text.format(location)
 

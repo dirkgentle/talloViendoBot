@@ -1,6 +1,7 @@
 import getopt
 import re
 import sys
+import time
 import traceback  # para logear los errores
 
 import praw  # reddit
@@ -130,3 +131,4 @@ if __name__ == '__main__':
             logger.output_log(traceback.format_exc())
             if debug_mode:
                 raise(exception)
+            time.sleep(5)

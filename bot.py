@@ -63,6 +63,7 @@ if __name__ == '__main__':
     comment_log_path = 'log.txt'
     multireddit = '+'.join(allowed_subreddits)
     debug_mode = False
+    backoff_counter = 1
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'd', 'debug')
@@ -126,9 +127,14 @@ if __name__ == '__main__':
                         log.append(comment.id)
                         logger.update_log(comment.id, comment_log_path)
 
+                if backoff_counter > 1:
+                    backoff_counter /= 2
+
         except Exception as exception:
             logger.output_log(str(exception))
             logger.output_log(traceback.format_exc())
             if debug_mode:
                 raise(exception)
-            time.sleep(5)
+
+            time.sleep(backoff_counter * 5)
+            backoff_counter *= 2
